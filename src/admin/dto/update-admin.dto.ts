@@ -1,7 +1,12 @@
-import { IsEmail, IsOptional } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, MinLength } from 'class-validator';
 
 export class UpdateAdminDto {
   @IsEmail()
-  @IsOptional()
+  
   email?: string;
+
+
+    @IsNotEmpty()
+    @MinLength(6)
+    password: string;
 }

@@ -10,4 +10,10 @@ export class AdminController {
   updateEmail(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateAdminDto) {
     return this.adminService.updateEmail(id, dto);
   }
+
+  // Update password endpoint
+  @Patch(':id/password')
+  updatePassword(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateAdminDto) {
+    return this.adminService.updatePassword(id, dto);
+  }
 }
