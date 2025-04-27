@@ -5,30 +5,39 @@ import * as bcrypt from 'bcrypt';
 import { Admin } from '../admin/entities/admin.entity';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(Admin)
     private adminRepo: Repository<Admin>,
+    private jwtService: JwtService,
   ) {}
 
-  async register(registerDto: RegisterDto): Promise<Admin> {
-    const existing = await this.adminRepo.findOne({ where: { email: registerDto.email } });
-    if (existing) throw new ConflictException('Email already exists');
+  async register(dto: RegisterDto): Promise<Admin> {
+    const existing = await this.adminRepo.findOne({ where: { email: dto.email } });
+    if (existing) throw new ConflictException('Email already in use');
 
-    const hashed = await bcrypt.hash(registerDto.password, 10);
-    const newAdmin = this.adminRepo.create({ ...registerDto, password: hashed });
+    const hashedPassword = await bcrypt.hash(dto.password, 10);
+    const newAdmin = this.adminRepo.create({ ...dto, password: hashedPassword });
     return this.adminRepo.save(newAdmin);
   }
 
-  async login(loginDto: LoginDto): Promise<string> {
-    const admin = await this.adminRepo.findOne({ where: { email: loginDto.email } });
-    if (!admin) throw new UnauthorizedException('Invalid  email ');
+  async login(dto: LoginDto) {
+    const admin = await this.adminRepo.findOne({ where: { email: dto.email } });
+    if (!admin) throw new UnauthorizedException('Invalid email');
 
-    const match = await bcrypt.compare(loginDto.password, admin.password);
-    if (!match) throw new UnauthorizedException('Invalid password');
+    const passwordMatch = await bcrypt.compare(dto.password, admin.password);
+    if (!passwordMatch) throw new UnauthorizedException('Invalid password');
 
-    return `Welcome ${admin.name}, you are logged in as ${admin.role}`;
+    const payload = { id: admin.id, email: admin.email, role: admin.role };
+    const token = this.jwtService.sign(payload);
+
+    return { 
+      access_token: token, 
+      message: `Welcome ${admin.name}, you are logged in as ${admin.role}` 
+    };
+    
   }
 }

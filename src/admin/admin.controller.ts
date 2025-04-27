@@ -1,19 +1,26 @@
-import { Controller, Patch, Param, Body, ParseIntPipe } from '@nestjs/common';
+import { Controller, Patch, Param, Body, ParseIntPipe, UseGuards, Request } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { UpdateAdminDto } from './dto/update-admin.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('admin')
 export class AdminController {
   constructor(private adminService: AdminService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Patch(':id/email')
-  updateEmail(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateAdminDto) {
-    return this.adminService.updateEmail(id, dto);
+  updateEmail(@Request() req, @Body() dto: UpdateAdminDto) {
+    const userId = req.user.id;
+    return this.adminService.updateEmail(userId, dto);
   }
 
-  // Update password endpoint
+  //update password
+  @UseGuards(JwtAuthGuard)
   @Patch(':id/password')
-  updatePassword(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateAdminDto) {
-    return this.adminService.updatePassword(id, dto);
+  updatePassword(@Request() req, @Body() dto: UpdateAdminDto) {
+    const userId = req.user.id;
+    return this.adminService.updatePassword(userId, dto);
   }
+
+
 }
