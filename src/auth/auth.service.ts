@@ -1,4 +1,4 @@
-import { Injectable, ConflictException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, ConflictException, UnauthorizedException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
@@ -6,6 +6,7 @@ import { Admin } from '../admin/entities/admin.entity';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
+import { UserRole } from './role/role'; 
 
 @Injectable()
 export class AuthService {
@@ -18,6 +19,11 @@ export class AuthService {
   async register(dto: RegisterDto): Promise<Admin> {
     const existing = await this.adminRepo.findOne({ where: { email: dto.email } });
     if (existing) throw new ConflictException('Email already in use');
+
+
+    if (!Object.values(UserRole).includes(dto.role as UserRole)) {
+      throw new BadRequestException('Invalid role');
+    }
 
     const hashedPassword = await bcrypt.hash(dto.password, 10);
     const newAdmin = this.adminRepo.create({ ...dto, password: hashedPassword });
@@ -38,6 +44,5 @@ export class AuthService {
       access_token: token, 
       message: `Welcome ${admin.name}, you are logged in as ${admin.role}` 
     };
-    
   }
 }
