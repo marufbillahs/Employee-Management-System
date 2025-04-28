@@ -1,5 +1,3 @@
-
 export class UpdateLeaveStatusDto {
-    status: 'Pending' | 'Approved' | 'Rejected';
-  }
-  
+  status: 'Pending' | 'Approved' | 'Rejected';
+}

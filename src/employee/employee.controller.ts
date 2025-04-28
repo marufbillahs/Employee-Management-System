@@ -13,7 +13,7 @@ export class EmployeeController {
   constructor(private employeeService: EmployeeService) {}
 
   @Post('create')
-  @Role('admin') // 🛡 Only Admin can Create Employee
+  @Role('admin')
   create(@Body() dto: CreateEmployeeDto, @Req() req: Request) {
     const currentUser = req.user;
     console.log('Current Admin:', currentUser);
@@ -21,7 +21,7 @@ export class EmployeeController {
   }
 
   @Get('all')
-  @Role('admin') // 🛡 Only Admin can View All Employee
+  @Role('admin') 
   findAll(@Req() req: Request) {
     const currentUser = req.user;
     console.log('Current Admin:', currentUser);

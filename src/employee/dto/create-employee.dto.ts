@@ -11,5 +11,8 @@ export class CreateEmployeeDto {
 
     @IsNotEmpty()
     department: string;
+
+    @IsNotEmpty()
+    position: string;
   }
   

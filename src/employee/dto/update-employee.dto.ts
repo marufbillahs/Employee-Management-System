@@ -1,15 +1,20 @@
-import { IsEmail, IsNotEmpty } from "class-validator";
+import { IsEmail, IsOptional, IsString } from 'class-validator';
 
 export class UpdateEmployeeDto {
-
-        @IsNotEmpty()
-        name: string;
-    
-        @IsNotEmpty()
-        @IsEmail()
-        email: string;
-    
-        @IsNotEmpty()
-        department: string
-  }
   
+  @IsOptional()
+  @IsString()
+  name?: string;
+
+  @IsOptional()
+  @IsEmail()
+  email?: string;
+
+  @IsOptional()
+  @IsString()
+  department?: string;
+
+  @IsOptional()
+  @IsString()
+  position?: string;
+}

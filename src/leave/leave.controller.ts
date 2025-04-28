@@ -1,7 +1,6 @@
-// src/leave/leave.controller.ts
 import { Controller, Get, Patch, Delete, Param, Body, UseGuards, ParseIntPipe } from '@nestjs/common';
 import { LeaveService } from './leave.service';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard'; // login protected
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard'; 
 
 @UseGuards(JwtAuthGuard)
 @Controller('leave')
