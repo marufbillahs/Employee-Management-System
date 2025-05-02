@@ -8,9 +8,12 @@ import { Employee } from './employee/entities/employee.entity';
 import { LeaveModule } from './leave/leave.module';
 import { Leave } from './leave/entities/leave.entity';
 import { User } from './auth/entities/user.entity';
+import { CacheModule } from '@nestjs/cache-manager';
+import * as redisStore from 'cache-manager-ioredis';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [
+  imports: [ 
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -18,8 +21,19 @@ import { User } from './auth/entities/user.entity';
       username: 'postgres',
       password: '123456',
       database: 'employeemanagementsystem',
-      entities: [User,Admin,Employee,Leave],
+      entities: [User,Admin, Employee, Leave],
       synchronize: true,
+    }),
+
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+
+    CacheModule.register({
+      isGlobal: true,
+      store: redisStore,
+      host: 'localhost',
+      port: 6379,
     }),
     AuthModule,
     AdminModule,

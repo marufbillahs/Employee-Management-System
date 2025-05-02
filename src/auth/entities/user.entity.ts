@@ -1,5 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from 'typeorm';
-import { UserRole } from '../role/role';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class User {
@@ -15,6 +14,16 @@ export class User {
   @Column()
   password: string;
 
-  @Column({ type: 'enum', enum: UserRole })
-  role: UserRole;
+  @Column()
+  role: string;
+
+  @Column({ default: false })
+  isVerified: boolean;
+
+
+  @Column({ type: 'varchar', nullable: true })
+  verificationCode: string | null;
+
+  @Column({ type: 'timestamp', nullable: true })
+  codeExpiresAt: Date | null;
 }
