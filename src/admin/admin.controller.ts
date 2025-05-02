@@ -7,13 +7,6 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 export class AdminController {
   constructor(private adminService: AdminService) {}
 
-  @UseGuards(JwtAuthGuard)
-  @Patch(':id/email')
-  updateEmail(@Request() req, @Body() dto: UpdateAdminDto) {
-    const userId = req.user.id;
-    return this.adminService.updateEmail(userId, dto);
-  }
-
   //update password
   @UseGuards(JwtAuthGuard)
   @Patch(':id/password')

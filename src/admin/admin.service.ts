@@ -16,22 +16,6 @@ export class AdminService {
     private userRepo: Repository<User>,
   ) {}
 
-  async updateEmail(id: number, dto: UpdateAdminDto): Promise<Admin> {
-    const admin = await this.adminRepo.findOne({where: { id },relations: ['user']});
-    if (!admin) throw new NotFoundException('Admin not found');
-
-    if (dto.email) {
-      const exists = await this.userRepo.findOne({ where: { email: dto.email } });
-      if (exists && exists.id !== admin.user.id) {
-        throw new ConflictException('Email already in use');
-      }
-
-      admin.user.email = dto.email!;
-      await this.userRepo.save(admin.user);
-    }
-
-    return this.adminRepo.save(admin);
-  }
    // Update password method
   async updatePassword(id: number, dto: UpdateAdminDto): Promise<Admin> {
     const admin = await this.adminRepo.findOne({where: { id },relations: ['user']});
