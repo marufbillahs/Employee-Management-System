@@ -7,6 +7,7 @@ import { EmployeeModule } from './employee/employee.module';
 import { Employee } from './employee/entities/employee.entity';
 import { LeaveModule } from './leave/leave.module';
 import { Leave } from './leave/entities/leave.entity';
+import { User } from './auth/entities/user.entity';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { Leave } from './leave/entities/leave.entity';
       username: 'postgres',
       password: '123456',
       database: 'employeemanagementsystem',
-      entities: [Admin,Employee,Leave],
+      entities: [User,Admin,Employee,Leave],
       synchronize: true,
     }),
     AuthModule,

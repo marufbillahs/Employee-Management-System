@@ -1,4 +1,5 @@
-import { IsEmail, IsNotEmpty, IsString, Matches, MinLength } from 'class-validator';
+import { IsEmail, IsEnum, IsNotEmpty, IsString, Matches, MinLength } from 'class-validator';
+import { UserRole } from '../role/role';
 
 export class RegisterDto {
   @IsString()
@@ -17,7 +18,8 @@ export class RegisterDto {
   })
   password: string;
 
-  @IsString()
-  @IsNotEmpty()
-  role: string;
+  @IsEnum(UserRole, {
+    message: 'Role must be one of admin, hr_manager, department_manager, employee',
+  })
+  role: UserRole;
 }

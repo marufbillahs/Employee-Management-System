@@ -1,19 +1,14 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
+import { User } from 'src/auth/entities/user.entity';
 
 @Entity()
 export class Admin {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  name: string;
+  @OneToOne(() => User, { cascade: true, eager: true })
+  @JoinColumn()
+  user: User;
 
-  @Column({ unique: true })
-  email: string;
-
-  @Column()
-  password: string;
-
-  @Column({ default: 'admin' })
-  role: string;
+ 
 }
