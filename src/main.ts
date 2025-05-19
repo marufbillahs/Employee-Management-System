@@ -9,7 +9,13 @@ async function bootstrap() {
     forbidNonWhitelisted: true, 
     transform: true,    
   }));
-
+  
+   // Enable CORS for frontend
+    app.enableCors({
+    origin: 'http://localhost:3000', 
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,                  
+  });
   await app.listen(4000);
 }
 bootstrap();
