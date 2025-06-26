@@ -97,6 +97,7 @@ export class AuthService {
 
     return {
       access_token: token,
+      role: user.role,
       message: `Welcome ${user.name}, you are logged in as ${user.role}`,
     };
   }
