@@ -15,6 +15,7 @@ import { AttendanceModule } from './attendance/attendance.module';
 import { Attendance } from './attendance/entities/attendance.entity';
 import { NoticeModule } from './notice/notice.module';
 import { Notice } from './notice/entities/notice.entity';
+import { ReportModule } from './report/report.module';
 
 @Module({
   imports: [ 
@@ -45,6 +46,7 @@ import { Notice } from './notice/entities/notice.entity';
     LeaveModule,
     AttendanceModule,
     NoticeModule,
+    ReportModule,
   ],
 })
 export class AppModule {}
