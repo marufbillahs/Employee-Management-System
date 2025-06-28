@@ -63,6 +63,22 @@ export class AuthController {
   
     return this.authService.resetPassword(id, dto);
   }
+
+  @Post('requestreset')
+   requestResetByEmail(@Body() dto: RequestPasswordResetDto) {
+  return this.authService.requestResetByEmail(dto);
+  }
+
+  @Post('verifyresetcode')
+verifyResetCodeByEmail(@Body() dto: VerifyResetCodeDto) {
+  return this.authService.verifyResetCodeByEmail(dto);
+}
+
+@Post('resetpassword')
+resetPasswordByEmail(@Body() dto: ResetPasswordDto) {
+  return this.authService.resetPasswordByEmail(dto);
+}
+
   
 
 }

@@ -159,6 +159,52 @@ export class AuthService {
   return { message: 'Password has been reset successfully' };
 }
 
+async requestResetByEmail(dto: RequestPasswordResetDto) {
+  const user = await this.userRepo.findOne({ where: { email: dto.email } });
+  if (!user) throw new BadRequestException('User not found');
+
+  const code = Math.floor(100000 + Math.random() * 900000).toString();
+  const key = `reset:${dto.email}`;
+
+  await this.cacheManager.set(key, { code }, 600_000); // 10 mins
+  await this.emailService.sendVerificationEmail(dto.email, code);
+
+  return { message: 'Verification code sent to email' };
+}
+
+async verifyResetCodeByEmail(dto: VerifyResetCodeDto) {
+  const key = `reset:${dto.email}`;
+  const cached = await this.cacheManager.get<any>(key);
+
+  if (!cached || cached.code !== dto.code) {
+    throw new BadRequestException('Invalid or expired code');
+  }
+
+  await this.cacheManager.set(`${key}:verified`, true, 600_000); // allow reset
+  await this.cacheManager.del(key); // prevent reuse of code
+
+  return { message: 'Code verified. You may now reset your password.' };
+}
+
+async resetPasswordByEmail(dto: ResetPasswordDto) {
+  const verified = await this.cacheManager.get(`reset:${dto.email}:verified`);
+  if (!verified) {
+    throw new BadRequestException('Code not verified or already used');
+  }
+
+  const user = await this.userRepo.findOne({ where: { email: dto.email } });
+  if (!user) throw new BadRequestException('User not found');
+
+  const hashed = await bcrypt.hash(dto.newPassword, 10);
+  user.password = hashed;
+  await this.userRepo.save(user);
+
+  await this.cacheManager.del(`reset:${dto.email}:verified`);
+
+  return { message: 'Password has been reset successfully' };
+}
+
+
 
 }
   

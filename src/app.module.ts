@@ -11,6 +11,8 @@ import { User } from './auth/entities/user.entity';
 import { CacheModule } from '@nestjs/cache-manager';
 import * as redisStore from 'cache-manager-ioredis';
 import { ConfigModule } from '@nestjs/config';
+import { AttendanceModule } from './attendance/attendance.module';
+import { Attendance } from './attendance/entities/attendance.entity';
 
 @Module({
   imports: [ 
@@ -21,7 +23,7 @@ import { ConfigModule } from '@nestjs/config';
       username: 'postgres',
       password: '123456',
       database: 'employeemanagementsystem',
-      entities: [User,Admin, Employee, Leave],
+      entities: [User,Admin, Employee, Leave,Attendance],
       synchronize: true,
     }),
 
@@ -39,6 +41,7 @@ import { ConfigModule } from '@nestjs/config';
     AdminModule,
     EmployeeModule,
     LeaveModule,
+    AttendanceModule,
   ],
 })
 export class AppModule {}

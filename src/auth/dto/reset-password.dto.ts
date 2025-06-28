@@ -1,6 +1,9 @@
-import { IsOptional, IsString, Matches, MinLength } from 'class-validator';
+import { IsOptional,IsEmail, IsString, Matches, MinLength } from 'class-validator';
 
 export class ResetPasswordDto {
+
+      @IsEmail()
+      email: string;
       @IsString()
       @IsOptional()
       @MinLength(6)
